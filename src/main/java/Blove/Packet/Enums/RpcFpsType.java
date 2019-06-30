@@ -13,8 +13,8 @@ public enum RpcFpsType {
     SERVER_TIMEOUT((byte) 0x03), // 服务端超时
     BAD_REQUEST((byte) 0x04), // 请求结构体错误
     BAD_RESPONSE((byte) 0x05), // 输出结构体错误
-    SERVICE_NOT_FOUND((byte) 0x06), // 未找到服务
-    SERVER_SERIALIZATION_ERROR((byte) 0x07),
+    HEART_TYPE((byte) 0x06), // 心跳请求
+    SERVER_SERIALIZATION_ERROR((byte) 0x07), //
     CLIENT_SERIALIZATION_ERROR((byte) 0x08),
     CLIENT_CANCELED((byte) 0x09), // 客户端取消操作
     SERVER_BUSY((byte) 0x0A), // 服务端繁忙

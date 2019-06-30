@@ -4,7 +4,6 @@ import Blove.Packet.Enums.RpcBeginAndEndSignal;
 import Blove.Util.CRCUtil;
 
 import java.nio.ByteBuffer;
-import java.util.zip.CRC32;
 
 /*
  * @Time    : 2019/6/29 6:29 PM
@@ -13,14 +12,31 @@ import java.util.zip.CRC32;
  * @File    : PacketModel.java
  * @Software: IntelliJ IDEA
  */
+
+
+/**
+ * @Author myou<myoueva @ gmail.com>
+ * @Description PacketModel:构建一帧的具体结构体
+ * --------------------------------------------------------------------------------------------
+ * |    header                                              |   body       |  tail            |
+ * --------------------------------------------------------------------------------------------
+ * |frame-header|frame-type|frame-acquire-code|packet-length|     Data     |crcCode|frame-tail|
+ * @Date 8:53 PM 2019/6/30
+ * @Param
+ * @return
+ **/
 public class PacketModel {
     private final byte frameHeader = RpcBeginAndEndSignal.START_FRAME.getCode();
     private final byte frameTail = RpcBeginAndEndSignal.END_FRAME.getCode();
     private byte frameType;
     private int acquireCode;
     private int packetLength;
+
+    public void setPacketData(byte[] packetData) {
+        this.packetData = packetData;
+    }
+
     private byte[] packetData;
-    private byte crcCode;
 
     // 转义规则字段
     private final byte REVISE_CODE = (byte) 0xAD; // 转义码
@@ -28,18 +44,20 @@ public class PacketModel {
     private final byte REVISE_TAIL = (byte) 0x01; // 尾部
     private final byte REVISE_SELF = (byte) 0x02; // 自身
 
+    public PacketModel(byte frameType, int acquireCode, byte[] packetData) {
+        this(frameType, acquireCode, 0, packetData);
+    }
 
-    public PacketModel(byte frameType, int acquireCode, int packetLength, byte[] packetData, byte crcCode) {
+    public PacketModel(byte frameType, int acquireCode, int packetLength, byte[] packetData) {
         this.frameType = frameType;
         this.acquireCode = acquireCode;
         this.packetLength = packetLength;
         this.packetData = packetData;
-        this.crcCode = crcCode;
     }
 
     /**
      * @return byte[]
-     * @Author myou<myoueva       @       gmail.com>
+     * @Author myou<myoueva               @               gmail.com>
      * @Description 转移内容字节(若是内容部分有和头尾字节重复则转义为指定的字节 ， 注意只转义内容部分)
      * 0xC0 -> 0xAD 0x00
      * 0xDE -> 0xAD 0x01
@@ -69,7 +87,7 @@ public class PacketModel {
 
     /**
      * @return byte[]
-     * @Author myou<myoueva   @   gmail.com>
+     * @Author myou<myoueva       @       gmail.com>
      * @Description 还原内容部分转义字段
      * @Date 7:37 PM 2019/6/29
      * @Param [body]
@@ -99,11 +117,11 @@ public class PacketModel {
     }
 
     /**
-     * @Author myou<myoueva@gmail.com>
+     * @return byte[]
+     * @Author myou<myoueva   @   gmail.com>
      * @Description 构建完整数据包(含crc自动生成构建)
      * @Date 8:23 PM 2019/6/29
      * @Param []
-     * @return byte[]
      **/
     public byte[] getPacket() {
         int len = 0;
@@ -123,12 +141,14 @@ public class PacketModel {
         crcBuffer.reset();
         crcBuffer.compact();
         crcBuffer.put(crc);
-        byte[] result = revise((byte[])crcBuffer.flip().array()); //数据转义
+        byte[] result = revise((byte[]) crcBuffer.flip().array()); //数据转义
         // 构造完整数据包
-        ByteBuffer frame = ByteBuffer.allocate(result.length+2);
+        ByteBuffer frame = ByteBuffer.allocate(result.length + 2);
         frame.put(frameHeader);
         frame.put(result);
         frame.put(frameTail);
         return (byte[]) frame.flip().array();
     }
+
+
 }

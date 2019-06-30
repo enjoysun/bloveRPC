@@ -1,5 +1,7 @@
 package Blove.Packet.impl;
 
+import Blove.Packet.model.PacketModel;
+
 /*
  * @Time    : 2019/6/29 6:28 PM
  * @Author  : YouMing
@@ -8,5 +10,5 @@ package Blove.Packet.impl;
  * @Software: IntelliJ IDEA
  */
 public interface PacketBaseImpl {
-
+    PacketModel getFrameBytes(int acquireCode, byte[] data);
 }
