@@ -1,3 +1,4 @@
+import Blove.Core.RPCLayerThreadFactory;
 import Blove.Packet.Enums.RpcBeginAndEndSignal;
 import Blove.Packet.Enums.RpcFpsType;
 import Blove.Util.CRCUtil;
@@ -17,5 +18,13 @@ public class test {
         System.out.println(RpcBeginAndEndSignal.END_FRAME.getCode());
         System.out.println(RpcFpsType.BAD_REQUEST.getCode());
         System.out.println(CRCUtil.getCRC("ss".getBytes()));
+        Thread thread =new RPCLayerThreadFactory("hello", false).newThread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("ok");
+            }
+        });
+        System.out.println(thread.getName());
+        thread.run();
     }
 }
