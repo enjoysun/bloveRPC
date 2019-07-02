@@ -1,5 +1,7 @@
 package Blove.Core;
 
+import Blove.Util.RPCSystemConfig;
+
 import java.util.concurrent.*;
 
 /*
@@ -20,8 +22,8 @@ public class RPCThreadPool {
     public static ExecutorService getExecutor(int threads, int queues){
         return new ThreadPoolExecutor(
                 threads,
-                Runtime.getRuntime().availableProcessors()*2,
-                0,
+                RPCSystemConfig.SYSTEM_KERNEL,
+                RPCSystemConfig.KEEP_ALIVE_TIME,
                 TimeUnit.MILLISECONDS,
                 queues==0?new SynchronousQueue<Runnable>():(queues<0?new LinkedBlockingQueue<Runnable>():new LinkedBlockingQueue<Runnable>(queues)),
                 new RPCLayerThreadFactory("RPCPool", true),

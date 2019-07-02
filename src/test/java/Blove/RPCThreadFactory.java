@@ -1,3 +1,5 @@
+package Blove;
+
 import Blove.Core.RPCLayerThreadFactory;
 import Blove.Packet.Enums.RpcBeginAndEndSignal;
 import Blove.Packet.Enums.RpcFpsType;
@@ -10,10 +12,10 @@ import java.util.zip.CRC32;
  * @Time    : 2019/6/28 5:09 PM
  * @Author  : YouMing
  * @Email   : myoueva@gmail.com
- * @File    : test.java
+ * @File    : Blove.RPCThreadFactory.java
  * @Software: IntelliJ IDEA
  */
-public class test {
+public class RPCThreadFactory {
     public static void main(String[] args) {
         System.out.println(RpcBeginAndEndSignal.END_FRAME.getCode());
         System.out.println(RpcFpsType.BAD_REQUEST.getCode());
