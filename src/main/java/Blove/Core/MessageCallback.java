@@ -34,7 +34,7 @@ public class MessageCallback {
         this.request = request;
     }
 
-    public Object start() throws InterruptedException {
+    public Object getResult() throws InterruptedException {
         // 返回rpc构造完毕的response构造体信息（多线程处理）
         try {
             lock.lock();
@@ -53,7 +53,7 @@ public class MessageCallback {
         }
     }
 
-    public void end(MsgResponse response) {
+    public void putResponse(MsgResponse response) {
         try {
             lock.lock();
             finish.signal();
