@@ -1,8 +1,13 @@
 package Blove.Packet.Service.Packets;
 
+import Blove.Model.MsgHeader;
+import Blove.Model.MsgTail;
+import Blove.Model.Services.AbstractStruct;
 import Blove.Packet.Enums.RpcFpsType;
 import Blove.Packet.impl.PacketBaseImpl;
 import Blove.Packet.model.PacketModel;
+
+import java.nio.ByteBuffer;
 
 /*
  * @Time    : 2019/6/30 10:14 PM
@@ -11,9 +16,15 @@ import Blove.Packet.model.PacketModel;
  * @File    : HeartPacket.java
  * @Software: IntelliJ IDEA
  */
-public class HeartPacket implements PacketBaseImpl {
+public class HeartPacket extends AbstractStruct implements PacketBaseImpl {
+
     @Override
-    public PacketModel getFrameBytes(int acquireCode, byte[] data) {
-        return new PacketModel(RpcFpsType.HEART_TYPE.getCode(), acquireCode, new byte[0]);
+    public PacketModel getFrameModel(int acquireCode, byte[] data) {
+        return getFrameModel(acquireCode, data, RpcFpsType.HEART_TYPE.getCode());
+    }
+
+    @Override
+    public byte[] getFrameBytes(int acquire, byte[] data) {
+        return getFrameBytes(acquire, data, RpcFpsType.NORMAL_TYPE.getCode());
     }
 }

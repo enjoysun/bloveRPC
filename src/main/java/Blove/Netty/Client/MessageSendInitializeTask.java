@@ -1,6 +1,7 @@
 package Blove.Netty.Client;
 
 import Blove.Netty.Channel.MessageSendInitialize;
+import Blove.Netty.Handler.MessageSendHandler;
 import Blove.Netty.RPCServerLoader;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -40,7 +41,8 @@ public class MessageSendInitializeTask implements Runnable {
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (channelFuture.isSuccess()){
                     // 客户端连接成功
-//                    channelFuture.channel().pipeline().get()
+                    MessageSendHandler handler= channelFuture.channel().pipeline().get(MessageSendHandler.class);
+                    RPCServerLoader.getInstance().setMessageSendHandler(handler);
                 }
             }
         });

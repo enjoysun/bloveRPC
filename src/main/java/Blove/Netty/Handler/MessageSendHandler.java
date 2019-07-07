@@ -1,7 +1,13 @@
 package Blove.Netty.Handler;
 
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
+import Blove.Core.MessageCallback;
+import Blove.Model.MsgRequest;
+import Blove.Model.MsgResponse;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
+
+import java.net.SocketAddress;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * @Time    : 2019/7/2 11:48 AM
@@ -12,7 +18,8 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class MessageSendHandler extends ChannelHandlerAdapter {
     /**
-     * @Author myou<myoueva@gmail.com>
+     * @return void
+     * @Author myou<myoueva               @               gmail.com>
      * @Description //ChannelHandlerAdapter
      * ChannelHandlerAdapter实现了ChannelHandler接口，封装了Channel的事件处理方法(接收消息，处理异常等等)可选择重写来定制自己的Handler
      * 事件类型解析
@@ -37,25 +44,86 @@ public class MessageSendHandler extends ChannelHandlerAdapter {
      * flush:一旦进行flush操作就调用。 flush操作将尝试将先前挂起的全部消息刷新到io缓存通道中。
      * @Date 11:05 AM 2019/7/4
      * @Param [ctx, cause]
-     * @return void
      **/
+    private final ConcurrentHashMap<String, MessageCallback> map = new ConcurrentHashMap<>();
+    private volatile Channel channel;
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public SocketAddress getSocketAddress() {
+        return socketAddress;
+    }
+
+    private SocketAddress socketAddress;
+
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        /**
+         * @Author myou<myoueva   @   gmail.com>
+         * @Description //handler处理异常，关闭handler连接取消注册
+         * @Date 4:07 PM 2019/7/4
+         * @Param [ctx, cause]
+         * @return void
+         **/
+        cause.printStackTrace();
+        ctx.close();
     }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        /**
+         * @Author myou<myoueva   @   gmail.com>
+         * @Description //注册成功，取出channel
+         * @Date 4:08 PM 2019/7/4
+         * @Param [ctx]
+         * @return void
+         **/
         super.channelRegistered(ctx);
+        channel = ctx.channel();
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        /**
+         * @Author myou<myoueva   @   gmail.com>
+         * @Description //准备收发消息就绪，取出远程地址
+         * @Date 4:09 PM 2019/7/4
+         * @Param [ctx]
+         * @return void
+         **/
         super.channelActive(ctx);
+        socketAddress = ctx.channel().remoteAddress();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
+        /**
+         * @Author myou<myoueva @ gmail.com>
+         * @Description
+         * 将handler消息转换为封装完成的
+         * @Date 4:13 PM 2019/7/4
+         * @Param [ctx, msg]
+         * @return void
+         **/
+        MsgResponse response = (MsgResponse) msg;
+        String messageId = response.getMessageId();
+        MessageCallback callback = map.get(messageId);
+        if (callback != null) {
+            map.remove(messageId);
+            callback.putResponse(response);
+        }
+    }
+
+    public void close() {
+        channel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    public MessageCallback sendRequest(MsgRequest request){
+        MessageCallback callback = new MessageCallback(request);
+        map.put(request.getMessageId(), callback);
+        channel.writeAndFlush(request);
+        return callback;
     }
 }

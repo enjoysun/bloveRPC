@@ -12,6 +12,7 @@ import java.util.Arrays;
  * @Software: IntelliJ IDEA
  */
 public class MsgRequest {
+
     /**
      * @Author myou<myoueva@gmail.com>
      * @Description netty通信服务端接收信息结构体
@@ -19,6 +20,7 @@ public class MsgRequest {
      * @Param
      * @return
      **/
+    private MsgHeader header;
     private String messageId;
 
     @Override

@@ -2,6 +2,7 @@ package Blove.Netty;
 
 import Blove.Core.RPCLayerThreadFactory;
 import Blove.Core.RPCThreadPool;
+import Blove.Netty.Handler.MessageSendHandler;
 import Blove.Packet.Enums.RPCSerializerProtocol;
 import Blove.Util.RPCSystemConfig;
 import io.netty.channel.EventLoopGroup;
@@ -36,6 +37,7 @@ public class RPCServerLoader {
     private Condition handlerStatus = lock.newCondition();
     private RPCSerializerProtocol serializerProtocol = RPCSerializerProtocol.JDK_SERIALIZER;
     private static final ExecutorService threadpool = RPCThreadPool.getExecutor(threadNum, queueNum);
+    private MessageSendHandler messageSendHandler;
 
     public RPCServerLoader() {
     }
@@ -68,5 +70,37 @@ public class RPCServerLoader {
             final InetSocketAddress remoteAddr = new InetSocketAddress(host, port);
 //            threadpool.submit();
         }
+    }
+
+    public MessageSendHandler getMessageSendHandler() throws InterruptedException {
+        try {
+            lock.lock();
+            if (messageSendHandler == null){
+                connectStatus.await();
+            }
+            return messageSendHandler;
+        }finally {
+            lock.unlock();
+        }
+    }
+
+    public void setMessageSendHandler(MessageSendHandler messageSendHandler){
+        try {
+            lock.lock();
+            this.messageSendHandler = messageSendHandler;
+            handlerStatus.signal();
+        }finally {
+            lock.unlock();
+        }
+    }
+
+    public void unLoad(){
+        messageSendHandler.close();
+        threadpool.shutdown();
+        eventLoopGroup.shutdownGracefully();
+    }
+
+    public void setSerializerProtocol(RPCSerializerProtocol serializerProtocol){
+        this.serializerProtocol = serializerProtocol;
     }
 }
