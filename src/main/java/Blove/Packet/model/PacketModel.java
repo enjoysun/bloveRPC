@@ -5,6 +5,7 @@ import Blove.Model.MsgTail;
 import Blove.Packet.Enums.RpcBeginAndEndSignal;
 import Blove.Util.CRCUtil;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 /*
@@ -27,7 +28,9 @@ import java.nio.ByteBuffer;
  * @Param
  * @return
  **/
-public class PacketModel {
+public class PacketModel implements Serializable {
+    private static final long serialVersionUID = 4300693191573207816L;
+
     public PacketModel(MsgHeader header, byte[] body, MsgTail tail) {
         this.header = header;
         this.body = body;

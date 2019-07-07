@@ -2,6 +2,7 @@ package Blove.Model;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /*
@@ -11,8 +12,9 @@ import java.util.Arrays;
  * @File    : MsgRequest.java
  * @Software: IntelliJ IDEA
  */
-public class MsgRequest {
+public class MsgRequest implements Serializable {
 
+    private static final long serialVersionUID = 7286203642022354762L;
     /**
      * @Author myou<myoueva@gmail.com>
      * @Description netty通信服务端接收信息结构体

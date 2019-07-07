@@ -2,6 +2,8 @@ package Blove.Model;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import java.io.Serializable;
+
 /*
  * @Time    : 2019/6/28 4:29 PM
  * @Author  : YouMing
@@ -9,7 +11,8 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  * @File    : MsgResponse.java
  * @Software: IntelliJ IDEA
  */
-public class MsgResponse {
+public class MsgResponse implements Serializable {
+    private static final long serialVersionUID = -5205347809467363759L;
     /**
      * @Author myou<myoueva @ gmail.com>
      * @Description rpc通信体输出结构类

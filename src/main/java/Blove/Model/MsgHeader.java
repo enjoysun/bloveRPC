@@ -2,6 +2,8 @@ package Blove.Model;
 
 import Blove.Packet.Enums.RpcBeginAndEndSignal;
 
+import java.io.Serializable;
+
 /*
  * @Time    : 2019/7/4 4:24 PM
  * @Author  : YouMing
@@ -9,8 +11,9 @@ import Blove.Packet.Enums.RpcBeginAndEndSignal;
  * @File    : MsgHeader.java
  * @Software: IntelliJ IDEA
  */
-public class MsgHeader {
+public class MsgHeader implements Serializable {
     private final static byte frameHeader = RpcBeginAndEndSignal.START_FRAME.getCode();
+    private static final long serialVersionUID = 8621388291212035113L;
     private byte frameType;
     private int acquireCode;
     private int packetLength;
