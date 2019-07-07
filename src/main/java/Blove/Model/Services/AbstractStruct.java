@@ -4,7 +4,6 @@ import Blove.Model.MsgHeader;
 import Blove.Model.MsgTail;
 import Blove.Model.impl.StructImpl;
 import Blove.Packet.Enums.RpcFpsType;
-import Blove.Packet.model.PacketModel;
 import Blove.Util.CRCUtil;
 
 import java.nio.ByteBuffer;
@@ -92,30 +91,30 @@ public class AbstractStruct implements StructImpl {
         return CRCUtil.getCRC(data).getBytes();
     }
 
-    public PacketModel getFrameModel(int acquireCode, byte[] packetData, byte type) {
-        MsgHeader header = new MsgHeader();
-        header.setFrameType(type);
-        header.setAcquireCode(acquireCode);
-        header.setPacketLength(packetData.length);
-        MsgTail tail = new MsgTail();
-        int len = 0;
-        if (packetData != null)
-            len = packetData.length;
-        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 11); //去除头帧和尾帧的长度
-        crcBuffer.put(RpcFpsType.HEART_TYPE.getCode());
-        crcBuffer.putInt(acquireCode);
-        crcBuffer.putInt(packetData.length);
-        crcBuffer.put(packetData);
-        // 添加帧中的crc
-        byte[] bytes = new byte[crcBuffer.position()];
-        crcBuffer.flip();
-        crcBuffer.mark();
-        crcBuffer.get(bytes);
-        byte[] crc = this.crcCode(bytes);
-        tail.setCrc(crc);
-        return new PacketModel(header, packetData, tail);
-
-    }
+//    public PacketModel getFrameModel(int acquireCode, byte[] packetData, byte type) {
+//        MsgHeader header = new MsgHeader();
+//        header.setFrameType(type);
+//        header.setAcquireCode(acquireCode);
+//        header.setPacketLength(packetData.length);
+//        MsgTail tail = new MsgTail();
+//        int len = 0;
+//        if (packetData != null)
+//            len = packetData.length;
+//        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 11); //去除头帧和尾帧的长度
+//        crcBuffer.put(RpcFpsType.HEART_TYPE.getCode());
+//        crcBuffer.putInt(acquireCode);
+//        crcBuffer.putInt(packetData.length);
+//        crcBuffer.put(packetData);
+//        // 添加帧中的crc
+//        byte[] bytes = new byte[crcBuffer.position()];
+//        crcBuffer.flip();
+//        crcBuffer.mark();
+//        crcBuffer.get(bytes);
+//        byte[] crc = this.crcCode(bytes);
+//        tail.setCrc(crc);
+//        return new PacketModel(header, packetData, tail);
+//
+//    }
 
     public byte[] getFrameBytes(int acquireCode, byte[] packetData, byte type){
         int len = 0;

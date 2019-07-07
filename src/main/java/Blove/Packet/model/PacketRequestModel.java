@@ -1,6 +1,7 @@
 package Blove.Packet.model;
 
 import Blove.Model.MsgHeader;
+import Blove.Model.MsgRequest;
 import Blove.Model.MsgTail;
 import Blove.Packet.Enums.RpcBeginAndEndSignal;
 import Blove.Util.CRCUtil;
@@ -12,7 +13,7 @@ import java.nio.ByteBuffer;
  * @Time    : 2019/6/29 6:29 PM
  * @Author  : YouMing
  * @Email   : myoueva@gmail.com
- * @File    : PacketModel.java
+ * @File    : PacketRequestModel.java
  * @Software: IntelliJ IDEA
  */
 
@@ -28,17 +29,18 @@ import java.nio.ByteBuffer;
  * @Param
  * @return
  **/
-public class PacketModel implements Serializable {
-    private static final long serialVersionUID = 4300693191573207816L;
+public class PacketRequestModel implements Serializable {
 
-    public PacketModel(MsgHeader header, byte[] body, MsgTail tail) {
+    private static final long serialVersionUID = -555380512242146522L;
+
+    public PacketRequestModel(MsgHeader header, MsgRequest body, MsgTail tail) {
         this.header = header;
         this.body = body;
         this.tail = tail;
     }
 
     private MsgHeader header;
-    private byte[] body;
+    private MsgRequest body;
     private MsgTail tail;
 
     public MsgHeader getHeader() {
@@ -49,11 +51,11 @@ public class PacketModel implements Serializable {
         this.header = header;
     }
 
-    public byte[] getBody() {
+    public MsgRequest getBody() {
         return body;
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(MsgRequest body) {
         this.body = body;
     }
 
