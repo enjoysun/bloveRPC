@@ -1,5 +1,7 @@
 package Blove.Netty.Client;
 
+import Blove.Codecs.MsgToMsg.MsgDecoder;
+import Blove.Codecs.MsgToMsg.MsgEncoder;
 import Blove.Netty.Handler.MessageSendHandler;
 import Blove.Packet.Enums.RPCSerializerProtocol;
 import io.netty.channel.ChannelInitializer;
@@ -32,16 +34,15 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(
+        socketChannel.pipeline().addLast(new MsgDecoder(
                 Integer.MAX_VALUE,
-                0,
-                MessageSendChannelInitializer.MESSAGE_LENGTH,
                 0,
                 MessageSendChannelInitializer.MESSAGE_LENGTH));
         /**
          * 编解码组件祖册
          * 客户端channel管道注册
          */
+        socketChannel.pipeline().addLast(new MsgEncoder());
         socketChannel.pipeline().addLast(new MessageSendHandler());
     }
 

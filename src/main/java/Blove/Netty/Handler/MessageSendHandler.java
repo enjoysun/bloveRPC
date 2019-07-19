@@ -3,6 +3,7 @@ package Blove.Netty.Handler;
 import Blove.Core.MessageCallback;
 import Blove.Model.MsgRequest;
 import Blove.Model.MsgResponse;
+import Blove.Packet.model.PacketResponseModel;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 
@@ -45,6 +46,8 @@ public class MessageSendHandler extends ChannelHandlerAdapter {
      * @Date 11:05 AM 2019/7/4
      * @Param [ctx, cause]
      **/
+
+    // map:用来维护处于活性的messageID
     private final ConcurrentHashMap<String, MessageCallback> map = new ConcurrentHashMap<>();
     private volatile Channel channel;
 
@@ -107,12 +110,12 @@ public class MessageSendHandler extends ChannelHandlerAdapter {
          * @Param [ctx, msg]
          * @return void
          **/
-        MsgResponse response = (MsgResponse) msg;
-        String messageId = response.getMessageId();
+        PacketResponseModel response = (PacketResponseModel) msg;
+        String messageId = response.getBody().getMessageId();
         MessageCallback callback = map.get(messageId);
         if (callback != null) {
             map.remove(messageId);
-            callback.putResponse(response);
+            callback.putResponse(response.getBody());
         }
     }
 
