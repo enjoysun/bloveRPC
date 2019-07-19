@@ -3,6 +3,8 @@ package Blove.Codecs.MsgToMsg;
 import Blove.Codecs.Marshalling.MarshallingFactory;
 import Blove.Codecs.Marshalling.NettyMarshallingDecoder;
 import Blove.Model.MsgHeader;
+import Blove.Model.MsgRequest;
+import Blove.Model.MsgTail;
 import Blove.Packet.model.PacketRequestModel;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,6 +34,17 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
         }
         PacketRequestModel model=new PacketRequestModel();
         MsgHeader header = new MsgHeader();
-        return null;
+        header.setFrameType(in.readByte());
+        header.setAcquireCode(in.readInt());
+        header.setPacketLength(in.readInt());
+        MsgTail tail = new MsgTail();
+        ByteBuf crcBuf = in.readBytes(4);
+        byte[] bytes = new byte[crcBuf.readableBytes()];
+        crcBuf.readBytes(bytes);
+        tail.setCrc(bytes);
+        model.setHeader(header);
+        model.setBody((MsgRequest) marshallingDecoder.decode(ctx, in));
+        model.setTail(tail);
+        return model;
     }
 }

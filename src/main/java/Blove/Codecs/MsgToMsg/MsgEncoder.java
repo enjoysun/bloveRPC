@@ -33,13 +33,13 @@ public class MsgEncoder extends MessageToMessageEncoder<PacketResponseModel> {
             channelHandlerContext.close();
         }
         ByteBuf sendBuffer = Unpooled.buffer();
-        sendBuffer.writeByte(packetModel.getHeader().getFrameHeader());
+//        sendBuffer.writeByte(packetModel.getHeader().getFrameHeader());
         sendBuffer.writeByte(packetModel.getHeader().getFrameType());
         sendBuffer.writeInt(packetModel.getHeader().getAcquireCode());
         sendBuffer.writeInt(packetModel.getHeader().getPacketLength());
-        marshallingEncoder.encode(channelHandlerContext, packetModel.getBody(), sendBuffer);
         sendBuffer.writeBytes(packetModel.getTail().getCrc());
-        sendBuffer.writeByte(packetModel.getTail().getFrameTail());
+        marshallingEncoder.encode(channelHandlerContext, packetModel.getBody(), sendBuffer);
+//        sendBuffer.writeByte(packetModel.getTail().getFrameTail());
         list.add(sendBuffer);
     }
 }
