@@ -12,5 +12,5 @@ public interface StructImpl {
 
     byte[] revise(byte[] body);
 
-    byte[] crcCode(byte[] data);
+    byte[] crcCode(int acquireCode,byte[] data);
 }

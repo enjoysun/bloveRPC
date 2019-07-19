@@ -87,8 +87,24 @@ public class AbstractStruct implements StructImpl {
     }
 
     @Override
-    public byte[] crcCode(byte[] data) {
-        return CRCUtil.getCRC(data).getBytes();
+    public byte[] crcCode(int acquireCode,byte[] data) {
+        /**
+         * @Author myoueva@gmail.com
+         * @Description //TODO
+         * 根据消息体+回应码+消息长度构建crc16校验码
+         * @Date 3:53 PM 2019/7/19
+         * @Param [data]
+         * @return byte[]
+         **/
+        int len = 0;
+        if (data != null)
+            len = data.length;
+        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 8);
+        crcBuffer.putInt(acquireCode);
+        crcBuffer.putInt(data.length);
+        crcBuffer.put(data);
+        byte[] bytes = new byte[crcBuffer.position()];
+        return CRCUtil.getCRC(bytes).getBytes();
     }
 
 //    public PacketModel getFrameModel(int acquireCode, byte[] packetData, byte type) {
@@ -116,30 +132,30 @@ public class AbstractStruct implements StructImpl {
 //
 //    }
 
-    public byte[] getFrameBytes(int acquireCode, byte[] packetData, byte type){
-        int len = 0;
-        if (packetData != null)
-            len = packetData.length;
-        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 11); //去除头帧和尾帧的长度
-        crcBuffer.put(type);
-        crcBuffer.putInt(acquireCode);
-        crcBuffer.putInt(packetData.length);
-        crcBuffer.put(packetData);
-        // 添加帧中的crc
-        byte[] bytes = new byte[crcBuffer.position()];
-        crcBuffer.flip();
-        crcBuffer.mark();
-        crcBuffer.get(bytes);
-        byte[] crc = this.crcCode(bytes);
-        crcBuffer.reset();
-        crcBuffer.compact();
-        crcBuffer.put(crc);
-        byte[] result = revise((byte[]) crcBuffer.flip().array()); //数据转义
-        // 构造完整数据包
-        ByteBuffer frame = ByteBuffer.allocate(result.length + 2);
-        frame.put(MsgHeader.getFrameHeader());
-        frame.put(result);
-        frame.put(MsgTail.getFrameTail());
-        return (byte[]) frame.flip().array();
-    }
+//    public byte[] getFrameBytes(int acquireCode, byte[] packetData, byte type){
+//        int len = 0;
+//        if (packetData != null)
+//            len = packetData.length;
+//        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 11); //去除头帧和尾帧的长度
+//        crcBuffer.put(type);
+//        crcBuffer.putInt(acquireCode);
+//        crcBuffer.putInt(packetData.length);
+//        crcBuffer.put(packetData);
+//        // 添加帧中的crc
+//        byte[] bytes = new byte[crcBuffer.position()];
+//        crcBuffer.flip();
+//        crcBuffer.mark();
+//        crcBuffer.get(bytes);
+//        byte[] crc = this.crcCode(bytes);
+//        crcBuffer.reset();
+//        crcBuffer.compact();
+//        crcBuffer.put(crc);
+//        byte[] result = revise((byte[]) crcBuffer.flip().array()); //数据转义
+//        // 构造完整数据包
+//        ByteBuffer frame = ByteBuffer.allocate(result.length + 2);
+//        frame.put(MsgHeader.getFrameHeader());
+//        frame.put(result);
+//        frame.put(MsgTail.getFrameTail());
+//        return (byte[]) frame.flip().array();
+//    }
 }

@@ -22,11 +22,11 @@ public class MarshallingFactory {
      * @Date 4:07 PM 2019/7/7
      * @Param []
      **/
-    public static MarshallingDecoder marshallingDecoder() {
+    public static NettyMarshallingDecoder marshallingDecoder() {
         final MarshallingConfiguration configuration = new MarshallingConfiguration();
         configuration.setVersion(5);
         UnmarshallerProvider provider = new DefaultUnmarshallerProvider(marshallerFactory, configuration);
-        MarshallingDecoder decoder = new MarshallingDecoder(provider, 1024 << 1);
+        NettyMarshallingDecoder decoder = new NettyMarshallingDecoder(provider, 1024 << 1);
         return decoder;
     }
 
@@ -37,12 +37,12 @@ public class MarshallingFactory {
      * @Param []
      * @return io.netty.handler.codec.marshalling.MarshallingEncoder
      **/
-    public static MarshallingEncoder marshallingEncoder() {
+    public static NettyMarshallingEncoder marshallingEncoder() {
         final MarshallingConfiguration configuration = new MarshallingConfiguration();
         configuration.setVersion(5);
         MarshallerProvider provider = new DefaultMarshallerProvider(
                 marshallerFactory, configuration);
-        MarshallingEncoder decoder = new MarshallingEncoder(provider);
+        NettyMarshallingEncoder decoder = new NettyMarshallingEncoder(provider);
         return decoder;
     }
 }

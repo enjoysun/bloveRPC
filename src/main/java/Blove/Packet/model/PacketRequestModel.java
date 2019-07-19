@@ -33,10 +33,7 @@ public class PacketRequestModel implements Serializable {
 
     private static final long serialVersionUID = -555380512242146522L;
 
-    public PacketRequestModel(MsgHeader header, MsgRequest body, MsgTail tail) {
-        this.header = header;
-        this.body = body;
-        this.tail = tail;
+    public PacketRequestModel() {
     }
 
     private MsgHeader header;
