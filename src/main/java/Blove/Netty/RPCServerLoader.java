@@ -31,6 +31,7 @@ public class RPCServerLoader {
      **/
     private static int threadNum = RPCSystemConfig.THREAD_POOL_THREAD_COUNT;
     private static int queueNum = RPCSystemConfig.THREAD_POOL_QUEUE_ELEMENT;
+    // 客户端消息处理池实例EventLoop
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(RPCSystemConfig.KEEP_ALIVE_TIME);
     private static Lock lock = new ReentrantLock();
     private Condition connectStatus = lock.newCondition();

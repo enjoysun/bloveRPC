@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RPCLayerThreadFactory implements ThreadFactory {
     /**
-     * @Author myou<myoueva               @               gmail.com>
-     * @Description 构建业务处理线程池工厂
+     * @Author myou<myoueva@gmail.com>
+     * @Description 构建业务处理线程池工厂 用来防止业务逻辑处理阻塞netty的channel线程。
      * 借鉴NioEventLoop自定义Nio线程
      * 工厂生产定制型Thread(名称、优先级、是否为守护)
      * @Date 11:38 AM 2019/7/1

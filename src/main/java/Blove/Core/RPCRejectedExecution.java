@@ -23,6 +23,14 @@ public class RPCRejectedExecution implements RejectedExecutionHandler {
     @Override
     public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
         System.out.println("线程池"+executor.toString()+"满载处理-----");
+        /**
+         * @Author myoueva@gmail.com
+         * @Description //TODO
+         * 打算后期进行线程满载后处理当前线程任务到队列记录用于后续重新处理
+         * @Date 2:38 PM 2019/7/19
+         * @Param [r, executor]
+         * @return void
+         **/
         new ThreadPoolExecutor.DiscardOldestPolicy().rejectedExecution(r, executor);
     }
 }

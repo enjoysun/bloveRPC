@@ -1,5 +1,6 @@
 package Blove.Netty.Client;
 
+import Blove.Netty.Handler.MessageSendHandler;
 import Blove.Packet.Enums.RPCSerializerProtocol;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -37,8 +38,11 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
                 MessageSendChannelInitializer.MESSAGE_LENGTH,
                 0,
                 MessageSendChannelInitializer.MESSAGE_LENGTH));
-
-//        socketChannel.pipeline().addLast(new Le)
+        /**
+         * 编解码组件祖册
+         * 客户端channel管道注册
+         */
+        socketChannel.pipeline().addLast(new MessageSendHandler());
     }
 
 }
