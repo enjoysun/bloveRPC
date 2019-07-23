@@ -1,10 +1,9 @@
-package Blove.Netty.Channel;
+package Blove.Netty.Handler;
 
 import Blove.Codecs.MsgToMsg.MsgDecoder;
 import Blove.Codecs.MsgToMsg.MsgEncoder;
-import Blove.Netty.Handler.MessageSendHandler;
+import Blove.Netty.Channel.MessageSendHandler;
 import Blove.Util.RPCSystemConfig;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 

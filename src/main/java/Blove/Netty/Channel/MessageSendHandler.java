@@ -1,4 +1,4 @@
-package Blove.Netty.Handler;
+package Blove.Netty.Channel;
 
 import Blove.Core.MessageCallback;
 import Blove.Model.MsgRequest;
