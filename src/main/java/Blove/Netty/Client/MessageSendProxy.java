@@ -8,7 +8,10 @@ package Blove.Netty.Client;
  * @Software: IntelliJ IDEA
  */
 
+import Blove.Core.MessageCallback;
 import Blove.Model.MsgRequest;
+import Blove.Netty.Channel.MessageSendHandler;
+import Blove.Netty.RPCServerLoader;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -23,6 +26,12 @@ import java.util.UUID;
  * @return
  **/
 public class MessageSendProxy<T> implements InvocationHandler {
+
+    private Class<T> interFace;
+    public MessageSendProxy(Class<T> tClass) {
+        interFace = tClass;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 构造请求消息体
@@ -32,6 +41,12 @@ public class MessageSendProxy<T> implements InvocationHandler {
         request.setMethodName(method.getName());
         request.setTypeParamaters(method.getParameterTypes());
         request.setValParameters(args);
-        return null;
+
+        // 执行
+        method.invoke(interFace, args);
+
+        MessageSendHandler handler = RPCServerLoader.getInstance().getMessageSendHandler();
+        MessageCallback callback = handler.sendRequest(request);
+        return callback.getResult();
     }
 }
