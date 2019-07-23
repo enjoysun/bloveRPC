@@ -70,7 +70,7 @@ public class AbstractStruct implements StructImpl {
     public byte[] revise(byte[] body) {
         ByteBuffer buffer = ByteBuffer.allocate(body.length * 2); // 初始化一个2倍body的bytebuffer
         for (byte item : body) { // 进行内容区域字节转义防止误读
-            if (item == MsgHeader.getFrameHeader()) {
+            if (item ==MsgHeader.getFrameHeader()) {
                 buffer.put(REVISE_CODE).put(REVISE_HEAD);
             } else if (item == MsgTail.getFrameTail()) {
                 buffer.put(REVISE_CODE).put(REVISE_TAIL);

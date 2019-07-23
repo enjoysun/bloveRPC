@@ -45,6 +45,7 @@ public class MessageSendProxy<T> implements InvocationHandler {
         // 执行
 //        method.invoke(interFace, args);
 
+        System.out.println(request.toString());
         MessageSendHandler handler = RPCServerLoader.getInstance().getMessageSendHandler();
         MessageCallback callback = handler.sendRequest(request);
         return callback.getResult();

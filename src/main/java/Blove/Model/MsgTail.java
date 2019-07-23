@@ -24,7 +24,7 @@ public class MsgTail implements Serializable {
         this.crc = crc;
     }
 
-    public byte getFrameTail() {
+    public static byte getFrameTail() {
         return frameTail;
     }
 }

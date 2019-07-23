@@ -18,7 +18,7 @@ public class MsgHeader implements Serializable {
     private int acquireCode;
     private int packetLength;
 
-    public byte getFrameHeader() {
+    public static byte getFrameHeader() {
         return frameHeader;
     }
 

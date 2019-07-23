@@ -84,7 +84,10 @@ class ClientHandler extends ChannelHandlerAdapter {
         header.setPacketLength(100);
         MsgTail tail = new MsgTail();
         tail.setCrc("2233".getBytes());
-        PacketRequestModel model = new PacketRequestModel(header, request, tail);
+        PacketRequestModel model = new PacketRequestModel();
+        model.setHeader(header);
+        model.setBody(request);
+        model.setTail(tail);
         ctx.writeAndFlush(model);
     }
 }
