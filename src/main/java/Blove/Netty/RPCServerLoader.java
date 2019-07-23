@@ -2,6 +2,7 @@ package Blove.Netty;
 
 import Blove.Core.RPCThreadPool;
 import Blove.Netty.Channel.MessageSendHandler;
+import Blove.Netty.Client.MessageSendInitializeTask;
 import Blove.Packet.Enums.RPCSerializerProtocol;
 import Blove.Util.RPCSystemConfig;
 import io.netty.channel.EventLoopGroup;
@@ -68,14 +69,14 @@ public class RPCServerLoader {
             String host = address[0];
             int port = Integer.valueOf(address[1]);
             final InetSocketAddress remoteAddr = new InetSocketAddress(host, port);
-//            threadpool.submit();
+            threadpool.submit(new MessageSendInitializeTask(eventLoopGroup, remoteAddr, this));
         }
     }
 
     public MessageSendHandler getMessageSendHandler() throws InterruptedException {
         try {
             lock.lock();
-            if (messageSendHandler == null){
+            while (messageSendHandler == null){
                 connectStatus.await();
             }
             return messageSendHandler;

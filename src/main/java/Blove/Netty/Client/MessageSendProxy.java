@@ -43,7 +43,7 @@ public class MessageSendProxy<T> implements InvocationHandler {
         request.setValParameters(args);
 
         // 执行
-        method.invoke(interFace, args);
+//        method.invoke(interFace, args);
 
         MessageSendHandler handler = RPCServerLoader.getInstance().getMessageSendHandler();
         MessageCallback callback = handler.sendRequest(request);
