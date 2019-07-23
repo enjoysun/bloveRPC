@@ -69,6 +69,9 @@ public class MessageSendInitializeTask implements Runnable {
                      */
                     MessageSendHandler handler= channelFuture.channel().pipeline().get(MessageSendHandler.class);
                     RPCServerLoader.getInstance().setMessageSendHandler(handler);
+                }else {
+                    System.err.println("连接失败");
+                    channelFuture.cause().printStackTrace();
                 }
             }
         });

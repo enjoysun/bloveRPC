@@ -26,4 +26,8 @@ public class RPCSystemConfig {
     public static final int THREAD_POOL_QUEUE_ELEMENT = Integer.getInteger("thread.pool.default.queue.element", -1);
     // 全局业务计算等待时间
     public static final int AWAIT_TIME = 10*1000;
+    // 消息长度和偏移长度
+    public static final int MESSAGE_LENGTH = 4;
+    // 帧长度
+    public static final int FRAME_LENGTH = 1024*1024;
 }
