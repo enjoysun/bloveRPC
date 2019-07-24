@@ -21,11 +21,11 @@ public class MsgMapping implements Serializable {
      **/
     private transient Map<String, Object> messageMapping;
 
-    protected final void setMessageMapping(Map<String, Object> map){
+    public  void setMessageMapping(Map<String, Object> map){
         messageMapping = map;
     }
 
-    protected final Map<String, Object> getMessageMapping(){
+    public  Map<String, Object> getMessageMapping(){
         return messageMapping;
     }
 }

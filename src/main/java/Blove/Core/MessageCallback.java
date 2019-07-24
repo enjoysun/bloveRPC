@@ -29,6 +29,7 @@ public class MessageCallback {
     private MsgRequest request;
     private static final Lock lock = new ReentrantLock();
     private Condition finish = lock.newCondition();
+    public MessageCallback(){}
 
     public MessageCallback(MsgRequest request) {
         this.request = request;
