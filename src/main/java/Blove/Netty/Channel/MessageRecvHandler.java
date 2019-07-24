@@ -1,5 +1,6 @@
 package Blove.Netty.Channel;
 
+import Blove.Core.Blogger;
 import Blove.Model.MsgRequest;
 import Blove.Model.MsgResponse;
 import Blove.Netty.Server.MessageRecvExecutor;
@@ -17,6 +18,7 @@ import io.netty.channel.ChannelHandlerContext;
 public class MessageRecvHandler extends ChannelHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        Blogger.loggerFactory().info("链路处理错误即将关闭:"+cause.getMessage());
         ctx.close();
     }
 

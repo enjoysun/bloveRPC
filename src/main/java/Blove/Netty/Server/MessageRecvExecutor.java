@@ -1,5 +1,6 @@
 package Blove.Netty.Server;
 
+import Blove.Core.Blogger;
 import Blove.Core.RPCLayerThreadFactory;
 import Blove.Core.RPCThreadPool;
 import Blove.Model.MsgMapping;
@@ -14,6 +15,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -107,15 +109,17 @@ public class MessageRecvExecutor {
 
     public void start() throws InterruptedException {
         NioEventLoopGroup boss = new NioEventLoopGroup();
-        NioEventLoopGroup worker = new NioEventLoopGroup(RPCSystemConfig.SYSTEM_KERNEL);
+        NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(boss, worker)
+                    .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childHandler(new MessageRecvChannelInitializer());
             ChannelFuture channelFuture = serverBootstrap.bind("localhost", 8086).sync();
             channelFuture.channel().closeFuture().sync();
+            Blogger.loggerFactory().info("Netty-Server-Start");
         }finally {
             worker.shutdownGracefully();
             boss.shutdownGracefully();

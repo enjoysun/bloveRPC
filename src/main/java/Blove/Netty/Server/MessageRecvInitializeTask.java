@@ -1,5 +1,6 @@
 package Blove.Netty.Server;
 
+import Blove.Core.Blogger;
 import Blove.Model.MsgRequest;
 import Blove.Model.MsgResponse;
 import io.netty.channel.ChannelFuture;
@@ -53,9 +54,9 @@ public class MessageRecvInitializeTask implements Runnable {
             public void operationComplete(ChannelFuture channelFuture) throws Exception {
                 if (!channelFuture.isSuccess()){
                     // 处理失败消息发送
-                    System.out.println(channelFuture.channel().remoteAddress());
+                    Blogger.loggerFactory().info("消息处理失败:"+msgRequest.getMessageId());
                 }else {
-                    System.out.println("Server-Send:"+msgRequest.getMessageId());
+                    Blogger.loggerFactory().info("消息处理成功:"+msgRequest.getMessageId());
                 }
             }
         });
