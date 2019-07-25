@@ -86,26 +86,26 @@ public class AbstractStruct implements StructImpl {
         return result;
     }
 
-    @Override
-    public byte[] crcCode(int acquireCode,byte[] data) {
-        /**
-         * @Author myoueva@gmail.com
-         * @Description //TODO
-         * 根据消息体+回应码+消息长度构建crc16校验码
-         * @Date 3:53 PM 2019/7/19
-         * @Param [data]
-         * @return byte[]
-         **/
-        int len = 0;
-        if (data != null)
-            len = data.length;
-        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 8);
-        crcBuffer.putInt(acquireCode);
-        crcBuffer.putInt(data.length);
-        crcBuffer.put(data);
-        byte[] bytes = new byte[crcBuffer.position()];
-        return CRCUtil.getCRC(bytes).getBytes();
-    }
+//    @Override
+//    public byte[] crcCode(int acquireCode,byte[] data) {
+//        /**
+//         * @Author myoueva@gmail.com
+//         * @Description //TODO
+//         * 根据消息体+回应码+消息长度构建crc16校验码
+//         * @Date 3:53 PM 2019/7/19
+//         * @Param [data]
+//         * @return byte[]
+//         **/
+//        int len = 0;
+//        if (data != null)
+//            len = data.length;
+//        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 8);
+//        crcBuffer.putInt(acquireCode);
+//        crcBuffer.putInt(data.length);
+//        crcBuffer.put(data);
+//        byte[] bytes = new byte[crcBuffer.position()];
+//        return CRCUtil.getCRC(bytes).getBytes();
+//    }
 
 //    public PacketModel getFrameModel(int acquireCode, byte[] packetData, byte type) {
 //        MsgHeader header = new MsgHeader();

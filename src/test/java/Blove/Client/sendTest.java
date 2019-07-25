@@ -1,6 +1,7 @@
 package Blove.Client;
 
 import Blove.Netty.Client.MsgSendExecutor;
+import Blove.Netty.Server.Simulate.Interface.Calc;
 
 /*
  * @Time    : 2019/7/23 4:24 PM
@@ -11,14 +12,10 @@ import Blove.Netty.Client.MsgSendExecutor;
  */
 public class sendTest {
     public static void main(String[] args) throws InterruptedException {
-        MsgSendExecutor executor = new MsgSendExecutor("127.0.0.1:8083");
+        MsgSendExecutor executor = new MsgSendExecutor("127.0.0.1:8086");
         Calc calc = executor.execute(Calc.class);
 //        executor.close();
         calc.add(1, 2);
         Thread.sleep(10000);
     }
-}
-
-interface Calc{
-    int add(int x, int y);
 }

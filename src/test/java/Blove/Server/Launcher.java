@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Launcher {
     public static void main(String[] args) throws InterruptedException {
-        Logger logger = LoggerFactory.getLogger(Object.class);
-        logger.info("ss");
         MessageRecvExecutor executor = MessageRecvExecutor.getExecutor();
         executor.start();
     }

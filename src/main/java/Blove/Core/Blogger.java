@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * @Software: IntelliJ IDEA
  */
 public class Blogger {
-    private volatile static Logger logger=LoggerFactory.getLogger("blove");
+    private volatile static Logger logger=LoggerFactory.getLogger(Blogger.class);
     public static Logger loggerFactory(){
         return logger;
     }

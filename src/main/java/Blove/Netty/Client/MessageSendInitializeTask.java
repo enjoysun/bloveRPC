@@ -1,6 +1,5 @@
 package Blove.Netty.Client;
 
-import Blove.Netty.Handler.MessageSendInitialize;
 import Blove.Netty.Channel.MessageSendHandler;
 import Blove.Netty.RPCServerLoader;
 import io.netty.bootstrap.Bootstrap;
@@ -56,7 +55,7 @@ public class MessageSendInitializeTask implements Runnable {
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
-                .handler(new MessageSendInitialize());
+                .handler(new MessageSendChannelInitializer());
 
         ChannelFuture channelFuture=bootstrap.connect(inetSocketAddress);
         channelFuture.addListener(new ChannelFutureListener() {

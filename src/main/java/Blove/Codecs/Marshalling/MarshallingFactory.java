@@ -13,36 +13,19 @@ import org.jboss.marshalling.MarshallingConfiguration;
  * @Software: IntelliJ IDEA
  */
 public class MarshallingFactory {
-    final static MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
-
-    /**
-     * @return io.netty.handler.codec.marshalling.MarshallingDecoder
-     * @Author myou<myoueva@ gmail.com>
-     * @Description //解码器
-     * @Date 4:07 PM 2019/7/7
-     * @Param []
-     **/
-    public static NettyMarshallingDecoder marshallingDecoder() {
-        final MarshallingConfiguration configuration = new MarshallingConfiguration();
-        configuration.setVersion(5);
-        UnmarshallerProvider provider = new DefaultUnmarshallerProvider(marshallerFactory, configuration);
-        NettyMarshallingDecoder decoder = new NettyMarshallingDecoder(provider, 1024 << 1);
-        return decoder;
+    static final MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
+    static final MarshallingConfiguration marshallingConfiguration = new MarshallingConfiguration();
+    public MarshallingFactory(){
+        marshallingConfiguration.setVersion(5);
     }
 
-    /**
-     * @Author myou<myoueva@gmail.com>
-     * @Description //编码器
-     * @Date 4:09 PM 2019/7/7
-     * @Param []
-     * @return io.netty.handler.codec.marshalling.MarshallingEncoder
-     **/
-    public static NettyMarshallingEncoder marshallingEncoder() {
-        final MarshallingConfiguration configuration = new MarshallingConfiguration();
-        configuration.setVersion(5);
-        MarshallerProvider provider = new DefaultMarshallerProvider(
-                marshallerFactory, configuration);
-        NettyMarshallingEncoder decoder = new NettyMarshallingEncoder(provider);
-        return decoder;
+    public static MarshallingEncoder buildMarshallingEncoder(){
+        MarshallerProvider provider = new DefaultMarshallerProvider(marshallerFactory, marshallingConfiguration);
+        return new MarshallingEncoder(provider);
+    }
+
+    public static MarshallingDecoder buildMarshallingDecoder(){
+        UnmarshallerProvider provider = new DefaultUnmarshallerProvider(marshallerFactory, marshallingConfiguration);
+        return new MarshallingDecoder(provider, 1024);
     }
 }

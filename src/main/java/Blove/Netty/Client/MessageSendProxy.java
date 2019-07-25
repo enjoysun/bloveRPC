@@ -8,10 +8,16 @@ package Blove.Netty.Client;
  * @Software: IntelliJ IDEA
  */
 
+import Blove.Core.Blogger;
 import Blove.Core.MessageCallback;
+import Blove.Model.MsgHeader;
 import Blove.Model.MsgRequest;
+import Blove.Model.MsgTail;
 import Blove.Netty.Channel.MessageSendHandler;
 import Blove.Netty.RPCServerLoader;
+import Blove.Packet.Enums.RpcFpsType;
+import Blove.Packet.model.PacketRequestModel;
+import Blove.Util.CRCUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -34,7 +40,7 @@ public class MessageSendProxy<T> implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // 构造请求消息体
+        // 构造body
         MsgRequest request = new MsgRequest();
         request.setMessageId(UUID.randomUUID().toString());
         request.setClassName(method.getDeclaringClass().getName());
@@ -42,12 +48,22 @@ public class MessageSendProxy<T> implements InvocationHandler {
         request.setTypeParamaters(method.getParameterTypes());
         request.setValParameters(args);
 
-        // 执行
-//        method.invoke(interFace, args);
+        PacketRequestModel model = new PacketRequestModel();
 
-        System.out.println(request.toString());
+        MsgHeader header = new MsgHeader();
+        header.setFrameType(RpcFpsType.NORMAL_TYPE.getCode());
+        header.setAcquireCode(4396);
+
+        MsgTail tail = new MsgTail();
+        tail.setCrc(CRCUtil.crcCode(header.getAcquireCode(), request.toByteArray()));
+
+        model.setHeader(header);
+        model.setBody(request);
+        model.setTail(tail);
+        Blogger.loggerFactory().info(request.getClassName()+"=="+request.getMethodName());
         MessageSendHandler handler = RPCServerLoader.getInstance().getMessageSendHandler();
-        MessageCallback callback = handler.sendRequest(request);
+        MessageCallback callback = handler.sendRequest(model);
+        Blogger.loggerFactory().info("发送request");
         return callback.getResult();
     }
 }

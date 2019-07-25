@@ -1,6 +1,7 @@
 package Blove.Util;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 /*
  * @Time    : 2019/6/29 7:43 PM
@@ -54,5 +55,25 @@ public class CRCUtil {
      */
     private String parseFloat2Hex(float data) {
         return Integer.toHexString(Float.floatToIntBits(data));
+    }
+
+    public static byte[] crcCode(int acquireCode,byte[] data) {
+        /**
+         * @Author myoueva@gmail.com
+         * @Description //TODO
+         * 根据消息体+回应码+消息长度构建crc16校验码
+         * @Date 3:53 PM 2019/7/19
+         * @Param [data]
+         * @return byte[]
+         **/
+        int len = 0;
+        if (data != null)
+            len = data.length;
+        ByteBuffer crcBuffer = ByteBuffer.allocate(len + 8);
+        crcBuffer.putInt(acquireCode);
+        crcBuffer.putInt(data.length);
+        crcBuffer.put(data);
+        byte[] bytes = new byte[crcBuffer.position()];
+        return CRCUtil.getCRC(bytes).getBytes();
     }
 }

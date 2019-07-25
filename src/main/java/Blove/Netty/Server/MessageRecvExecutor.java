@@ -108,6 +108,7 @@ public class MessageRecvExecutor {
     }
 
     public void start() throws InterruptedException {
+        Blogger.loggerFactory().info("开始启动");
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {

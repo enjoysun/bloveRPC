@@ -1,8 +1,12 @@
 package Blove.Model;
 
+import Blove.Util.CRCUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 /*
@@ -82,4 +86,14 @@ public class MsgRequest implements Serializable {
     }
 
     private Object[] valParameters;
+
+    public byte[] toByteArray(){
+        ByteBuf buf = Unpooled.buffer();
+        buf.writeBytes(getMessageId().getBytes());
+        buf.writeBytes(getClassName().getBytes());
+        buf.writeBytes(getMethodName().getBytes());
+        buf.writeByte(getTypeParamaters().length);
+        buf.writeByte(getValParameters().length);
+        return buf.array();
+    }
 }

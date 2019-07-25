@@ -4,7 +4,6 @@ import Blove.Codecs.Marshalling.MarshallingFactory;
 import Blove.Model.MsgHeader;
 import Blove.Model.MsgRequest;
 import Blove.Model.MsgTail;
-import Blove.Model.impl.StructImpl;
 import Blove.Packet.Enums.RpcFpsType;
 import Blove.Packet.model.PacketRequestModel;
 import io.netty.bootstrap.Bootstrap;
@@ -24,7 +23,7 @@ import java.util.UUID;
  */
 public class MarshallingEncoder {
     public static void main(String[] args) {
-        new Client().connect("localhost", 8083);
+//        new ClientCodec().connect("localhost", 8083);
     }
 }
 
@@ -40,10 +39,10 @@ class Client {
 
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
-                ch.pipeline().addLast(
-                        MarshallingFactory.marshallingDecoder());
-                ch.pipeline().addLast(
-                        MarshallingFactory.marshallingEncoder());
+//                ch.pipeline().addLast(
+//                        MarshallingFactory.marshallingDecoder());
+//                ch.pipeline().addLast(
+//                        MarshallingFactory.marshallingEncoder());
                 ch.pipeline().addLast(new ClientHandler());
             }
         });
@@ -81,7 +80,7 @@ class ClientHandler extends ChannelHandlerAdapter {
         MsgHeader header = new MsgHeader();
         header.setAcquireCode(1234);
         header.setFrameType(RpcFpsType.NORMAL_TYPE.getCode());
-        header.setPacketLength(100);
+//        header.setPacketLength(100);
         MsgTail tail = new MsgTail();
         tail.setCrc("2233".getBytes());
         PacketRequestModel model = new PacketRequestModel();

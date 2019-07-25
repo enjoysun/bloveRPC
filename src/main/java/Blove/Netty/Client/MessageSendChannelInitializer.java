@@ -1,10 +1,14 @@
 package Blove.Netty.Client;
 
+import Blove.Codecs.Marshalling.MarshallingFactory;
 import Blove.Codecs.MsgToMsg.MsgDecoder;
 import Blove.Codecs.MsgToMsg.MsgEncoder;
 import Blove.Netty.Channel.MessageSendHandler;
+import Blove.Util.RPCSystemConfig;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
 
 /*
  * @Time    : 2019/7/4 5:11 PM
@@ -23,25 +27,19 @@ public class MessageSendChannelInitializer extends ChannelInitializer<SocketChan
      * @Param
      * @return
      **/
-    private static final int MESSAGE_LENGTH = 4;
-//    private RPCSerializerProtocol serializerProtocol;
-
-//    public MessageSendChannelInitializer(RPCSerializerProtocol serializerProtocol) {
-//        this.serializerProtocol = serializerProtocol;
-//    }
 
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
-        socketChannel.pipeline().addLast(new MsgDecoder(
-                Integer.MAX_VALUE,
+        socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(
+                RPCSystemConfig.FRAME_LENGTH,
                 0,
-                MessageSendChannelInitializer.MESSAGE_LENGTH));
-        /**
-         * 编解码组件祖册
-         * 客户端channel管道注册
-         */
-        socketChannel.pipeline().addLast(new MsgEncoder());
-        socketChannel.pipeline().addLast(new MessageSendHandler());
+                RPCSystemConfig.MESSAGE_LENGTH,
+                0,
+                RPCSystemConfig.MESSAGE_LENGTH
+        ));
+        socketChannel.pipeline().addLast(new LengthFieldPrepender(RPCSystemConfig.MESSAGE_LENGTH));
+        socketChannel.pipeline().addLast(MarshallingFactory.buildMarshallingDecoder());
+        socketChannel.pipeline().addLast(MarshallingFactory.buildMarshallingEncoder());
     }
 
 }

@@ -3,6 +3,8 @@ package Blove.Core;
 import Blove.Exception.InvokeModuleException;
 import Blove.Model.MsgRequest;
 import Blove.Model.MsgResponse;
+import Blove.Packet.model.PacketRequestModel;
+import Blove.Packet.model.PacketResponseModel;
 import Blove.Util.RPCSystemConfig;
 
 import java.util.concurrent.TimeUnit;
@@ -25,13 +27,13 @@ public class MessageCallback {
      * @Param
      * @return
      **/
-    private MsgResponse response;
-    private MsgRequest request;
+    private PacketResponseModel response;
+    private PacketRequestModel request;
     private static final Lock lock = new ReentrantLock();
     private Condition finish = lock.newCondition();
     public MessageCallback(){}
 
-    public MessageCallback(MsgRequest request) {
+    public MessageCallback(PacketRequestModel request) {
         this.request = request;
     }
 
@@ -41,10 +43,10 @@ public class MessageCallback {
             lock.lock();
             finish.await(RPCSystemConfig.AWAIT_TIME, TimeUnit.MILLISECONDS);
             if (this.response != null) {
-                if (this.response.getError().isEmpty()) {
-                    return this.response.getResult();
+                if (this.response.getBody().getError().isEmpty()) {
+                    return this.response.getBody().getResult();
                 } else {
-                    throw new InvokeModuleException(this.response.getError());
+                    throw new InvokeModuleException(this.response.getBody().getError());
                 }
             } else {
                 return null;
@@ -54,7 +56,7 @@ public class MessageCallback {
         }
     }
 
-    public void putResponse(MsgResponse response) {
+    public void putResponse(PacketResponseModel response) {
         try {
             lock.lock();
             finish.signal();

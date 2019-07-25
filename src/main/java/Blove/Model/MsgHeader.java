@@ -16,7 +16,6 @@ public class MsgHeader implements Serializable {
     private static final long serialVersionUID = 8621388291212035113L;
     private byte frameType;
     private int acquireCode;
-    private int packetLength;
 
     public static byte getFrameHeader() {
         return frameHeader;
@@ -36,13 +35,5 @@ public class MsgHeader implements Serializable {
 
     public void setAcquireCode(int acquireCode) {
         this.acquireCode = acquireCode;
-    }
-
-    public int getPacketLength() {
-        return packetLength;
-    }
-
-    public void setPacketLength(int packetLength) {
-        this.packetLength = packetLength;
     }
 }

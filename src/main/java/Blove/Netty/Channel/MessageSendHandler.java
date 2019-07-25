@@ -2,7 +2,7 @@ package Blove.Netty.Channel;
 
 import Blove.Core.MessageCallback;
 import Blove.Model.MsgRequest;
-import Blove.Model.MsgResponse;
+import Blove.Packet.model.PacketRequestModel;
 import Blove.Packet.model.PacketResponseModel;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -115,7 +115,7 @@ public class MessageSendHandler extends ChannelHandlerAdapter {
         MessageCallback callback = map.get(messageId);
         if (callback != null) {
             map.remove(messageId);
-            callback.putResponse(response.getBody());
+            callback.putResponse(response);
         }
     }
 
@@ -123,9 +123,9 @@ public class MessageSendHandler extends ChannelHandlerAdapter {
         channel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
     }
 
-    public MessageCallback sendRequest(MsgRequest request){
+    public MessageCallback sendRequest(PacketRequestModel request){
         MessageCallback callback = new MessageCallback(request);
-        map.put(request.getMessageId(), callback);
+        map.put(request.getBody().getMessageId(), callback);
         channel.writeAndFlush(request);
         return callback;
     }

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.marshalling.MarshallerProvider;
 import io.netty.handler.codec.marshalling.MarshallingEncoder;
+import org.jboss.marshalling.Marshaller;
 
 /*
  * @Time    : 2019/7/19 4:15 PM

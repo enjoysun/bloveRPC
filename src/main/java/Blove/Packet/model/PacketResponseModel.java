@@ -16,12 +16,6 @@ import java.io.Serializable;
 public class PacketResponseModel implements Serializable {
     private static final long serialVersionUID = -1885189978653749518L;
 
-    public PacketResponseModel(MsgHeader header, MsgResponse body, MsgTail tail) {
-        this.header = header;
-        this.body = body;
-        this.tail = tail;
-    }
-
     private MsgHeader header;
     private MsgResponse body;
     private MsgTail tail;

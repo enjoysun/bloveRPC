@@ -18,11 +18,11 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
  * @Software: IntelliJ IDEA
  */
 public class MsgDecoder extends LengthFieldBasedFrameDecoder {
-    private final NettyMarshallingDecoder marshallingDecoder;
+//    private final NettyMarshallingDecoder marshallingDecoder;
 
     public MsgDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength) {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
-        this.marshallingDecoder = MarshallingFactory.marshallingDecoder();
+//        this.marshallingDecoder = MarshallingFactory.marshallingDecoder();
     }
 
     @Override
@@ -34,16 +34,16 @@ public class MsgDecoder extends LengthFieldBasedFrameDecoder {
         }
         PacketRequestModel model=new PacketRequestModel();
         MsgHeader header = new MsgHeader();
+//        header.setPacketLength(in.readInt());
         header.setFrameType(in.readByte());
         header.setAcquireCode(in.readInt());
-        header.setPacketLength(in.readInt());
         MsgTail tail = new MsgTail();
         ByteBuf crcBuf = in.readBytes(4);
         byte[] bytes = new byte[crcBuf.readableBytes()];
         crcBuf.readBytes(bytes);
         tail.setCrc(bytes);
         model.setHeader(header);
-        model.setBody((MsgRequest) marshallingDecoder.decode(ctx, in));
+//        model.setBody((MsgRequest) marshallingDecoder.decode(ctx, in));
         model.setTail(tail);
         return model;
     }

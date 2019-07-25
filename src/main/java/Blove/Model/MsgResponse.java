@@ -1,5 +1,7 @@
 package Blove.Model;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
@@ -53,4 +55,12 @@ public class MsgResponse implements Serializable {
     }
 
     private Object result;
+
+    public byte[] toByteArray(){
+        ByteBuf buf = Unpooled.buffer();
+        buf.writeBytes(getMessageId().getBytes());
+        buf.writeBytes(getError().getBytes());
+        buf.writeBytes(getResult().toString().getBytes());
+        return buf.array();
+    }
 }
