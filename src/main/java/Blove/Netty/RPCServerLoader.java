@@ -34,7 +34,6 @@ public class RPCServerLoader {
     // 客户端消息处理池实例EventLoop
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup(RPCSystemConfig.KEEP_ALIVE_TIME);
     private static Lock lock = new ReentrantLock();
-    private Condition connectStatus = lock.newCondition();
     private Condition handlerStatus = lock.newCondition();
     private RPCSerializerProtocol serializerProtocol = RPCSerializerProtocol.JDK_SERIALIZER;
     private static final ExecutorService threadpool = RPCThreadPool.getExecutor(threadNum, queueNum);
@@ -77,7 +76,7 @@ public class RPCServerLoader {
         try {
             lock.lock();
             while (messageSendHandler == null){
-                connectStatus.await();
+                handlerStatus.await();
             }
             return messageSendHandler;
         }finally {

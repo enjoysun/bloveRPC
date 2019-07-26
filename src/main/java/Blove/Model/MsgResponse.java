@@ -59,7 +59,7 @@ public class MsgResponse implements Serializable {
     public byte[] toByteArray(){
         ByteBuf buf = Unpooled.buffer();
         buf.writeBytes(getMessageId().getBytes());
-        buf.writeBytes(getError().getBytes());
+        buf.writeBytes((getError()==null?"":getError()).getBytes());
         buf.writeBytes(getResult().toString().getBytes());
         return buf.array();
     }

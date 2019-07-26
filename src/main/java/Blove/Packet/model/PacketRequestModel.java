@@ -36,6 +36,12 @@ public class PacketRequestModel implements Serializable {
     public PacketRequestModel() {
     }
 
+    public PacketRequestModel(MsgHeader header, MsgRequest body, MsgTail tail) {
+        this.header = header;
+        this.body = body;
+        this.tail = tail;
+    }
+
     private MsgHeader header;
     private MsgRequest body;
     private MsgTail tail;

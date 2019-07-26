@@ -32,5 +32,6 @@ public class MessageRecvChannelInitializer extends ChannelInitializer<SocketChan
         socketChannel.pipeline().addLast(new LengthFieldPrepender(RPCSystemConfig.MESSAGE_LENGTH));
         socketChannel.pipeline().addLast(MarshallingFactory.buildMarshallingDecoder());
         socketChannel.pipeline().addLast(MarshallingFactory.buildMarshallingEncoder());
+        socketChannel.pipeline().addLast(new MessageRecvHandler());
     }
 }

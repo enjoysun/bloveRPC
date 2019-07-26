@@ -19,6 +19,13 @@ public class PacketResponseModel implements Serializable {
     private MsgHeader header;
     private MsgResponse body;
     private MsgTail tail;
+    public PacketResponseModel(){}
+
+    public PacketResponseModel(MsgHeader header, MsgResponse body, MsgTail tail) {
+        this.header = header;
+        this.body = body;
+        this.tail = tail;
+    }
 
     public MsgHeader getHeader() {
         return header;

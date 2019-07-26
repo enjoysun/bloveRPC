@@ -41,9 +41,11 @@ public class MessageCallback {
         // 返回rpc构造完毕的response构造体信息（多线程处理）
         try {
             lock.lock();
-            finish.await(RPCSystemConfig.AWAIT_TIME, TimeUnit.MILLISECONDS);
+            while (response==null) {
+                finish.await(RPCSystemConfig.AWAIT_TIME, TimeUnit.MILLISECONDS);
+            }
             if (this.response != null) {
-                if (this.response.getBody().getError().isEmpty()) {
+                if (null==this.response.getBody().getError()||this.response.getBody().getError().isEmpty()) {
                     return this.response.getBody().getResult();
                 } else {
                     throw new InvokeModuleException(this.response.getBody().getError());
@@ -59,8 +61,8 @@ public class MessageCallback {
     public void putResponse(PacketResponseModel response) {
         try {
             lock.lock();
-            finish.signal();
             this.response = response;
+            finish.signal();
         } finally {
             lock.unlock();
         }

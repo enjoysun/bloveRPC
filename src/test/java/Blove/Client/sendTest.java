@@ -15,7 +15,8 @@ public class sendTest {
         MsgSendExecutor executor = new MsgSendExecutor("127.0.0.1:8086");
         Calc calc = executor.execute(Calc.class);
 //        executor.close();
-        calc.add(1, 2);
+        int result = calc.add(4, 2);
+        System.out.println(result);
         Thread.sleep(10000);
     }
 }

@@ -5,6 +5,7 @@ import Blove.Model.MsgRequest;
 import Blove.Model.MsgResponse;
 import Blove.Netty.Server.MessageRecvExecutor;
 import Blove.Netty.Server.MessageRecvInitializeTask;
+import Blove.Packet.model.PacketRequestModel;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -23,8 +24,13 @@ public class MessageRecvHandler extends ChannelHandlerAdapter {
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        super.channelActive(ctx);
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        MsgRequest msgRequest = (MsgRequest) msg;
+        PacketRequestModel msgRequest = (PacketRequestModel) msg;
         MsgResponse response = new MsgResponse();
         MessageRecvExecutor executor = MessageRecvExecutor.getExecutor();
         MessageRecvInitializeTask task = new MessageRecvInitializeTask(
