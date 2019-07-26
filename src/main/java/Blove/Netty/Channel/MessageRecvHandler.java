@@ -6,8 +6,11 @@ import Blove.Model.MsgResponse;
 import Blove.Netty.Server.MessageRecvExecutor;
 import Blove.Netty.Server.MessageRecvInitializeTask;
 import Blove.Packet.model.PacketRequestModel;
+import Blove.Util.Common;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.util.logging.Logger;
 
 /*
  * @Time    : 2019/7/24 3:21 PM
@@ -31,6 +34,11 @@ public class MessageRecvHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         PacketRequestModel msgRequest = (PacketRequestModel) msg;
+        boolean flag=Common.checkCrc(msgRequest.getHeader().getAcquireCode(), msgRequest.getBody().toByteArray(), msgRequest.getTail().getCrc());
+        if (!flag){
+            Blogger.loggerFactory().info("crc校验失败，该链路即将关闭");
+            ctx.close();
+        }
         MsgResponse response = new MsgResponse();
         MessageRecvExecutor executor = MessageRecvExecutor.getExecutor();
         MessageRecvInitializeTask task = new MessageRecvInitializeTask(

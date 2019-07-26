@@ -18,6 +18,7 @@ import Blove.Netty.RPCServerLoader;
 import Blove.Packet.Enums.RpcFpsType;
 import Blove.Packet.model.PacketRequestModel;
 import Blove.Util.CRCUtil;
+import Blove.Util.Common;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -52,7 +53,7 @@ public class MessageSendProxy<T> implements InvocationHandler {
 
         MsgHeader header = new MsgHeader();
         header.setFrameType(RpcFpsType.NORMAL_TYPE.getCode());
-        header.setAcquireCode(4396);
+        header.setAcquireCode(Common.getAcquireCode(request.getMessageId()));
 
         MsgTail tail = new MsgTail();
         tail.setCrc(CRCUtil.crcCode(header.getAcquireCode(), request.toByteArray()));
